@@ -1,0 +1,17 @@
+'use strict';
+const assert=require('node:assert/strict'),P=require('../Resources/Widgets/physics.js'),fs=require('node:fs');
+let passed=0;function check(name,fn){fn();passed++;process.stdout.write('PASS '+name+'\n');}
+function advance(m,seconds){for(let i=0;i<seconds*120;i++)P.tick(m,1/120);}
+check('Exactly ten real models and matching widget registrations',()=>{const manifest=JSON.parse(fs.readFileSync(__dirname+'/../Resources/Widgets/manifest.json'));assert.equal(P.ids.length,10);assert.deepEqual(manifest.widgets.map(w=>w.id),P.ids);});
+for(const id of P.ids)check(id+' responds, remains finite, and round-trips its state',()=>{const m=P.create(id),initial=JSON.stringify(P.serialize(m));P.action(m);P.tick(m,1/60);assert.notEqual(JSON.stringify(P.serialize(m)),initial);advance(m,2);const saved=P.serialize(m),restored=P.serialize(P.create(id,saved));assert.deepEqual(restored,saved);assert(!JSON.stringify(saved).includes('null'));});
+check('Spinner transfers a drag into damped inertia',()=>{const m=P.create('spinner');P.press(m,420,210,0);P.move(m,300,330,.1);P.release(m);const angle=m.state.angle,velocity=m.velocity;advance(m,.2);assert(m.state.angle>angle);advance(m,8);assert(Math.abs(m.velocity)<Math.abs(velocity)/10);});
+check('Bubbles pop once and reset through a fresh model',()=>{const m=P.create('bubbles');P.press(m,130,110);P.press(m,130,110);assert.equal(m.state.popped.filter(Boolean).length,1);assert.equal(m.events.length,1);assert.equal(P.create('bubbles').state.popped.filter(Boolean).length,0);});
+check('Clicker counts releases and its spring settles',()=>{const m=P.create('clicker');P.press(m,300,203);assert.equal(m.state.clicks,0);P.release(m);assert.equal(m.state.clicks,1);advance(m,3);assert(Math.abs(m.depth)<.01);});
+check('Switches stay switched after their lever animation settles',()=>{const m=P.create('toggles');P.press(m,132,140);advance(m,1);assert.equal(m.state.switches[0],true);assert(m.progress[0]>.99);});
+check('Abacus beads push their neighbours without crossing rods or each other',()=>{const m=P.create('abacus');P.press(m,140,105);P.move(m,500,105);P.release(m);const row=m.state.beads[0];assert(row[0]>140);assert(row[5]<=502);for(let i=1;i<6;i++)assert(row[i]-row[i-1]>=40.99);});
+check('Magnets stay inside their tray and stop scheduling after settling',()=>{const m=P.create('magnets');P.action(m);advance(m,10);assert.equal(P.tick(m,.016),false);for(const[x,y]of m.state.points)assert(x>=64&&x<=536&&y>=64&&y<=356);});
+check('Elastic band returns to rest with a damped spring',()=>{const m=P.create('elastic');P.action(m);assert.equal(m.state.point[1],345);advance(m,5);assert(Math.abs(m.state.point[1]-235)<.1);});
+check('Zipper follows the pull, hits detents, and closes from the keyboard',()=>{const m=P.create('zipper');P.press(m,300,350);assert.equal(m.state.zip,0);P.move(m,300,80);assert.equal(m.state.zip,1);P.release(m);assert(m.events.length);P.action(m);advance(m,2);assert.equal(m.state.zip,0);});
+check('Cradle transfers momentum to the opposite end',()=>{const m=P.create('cradle');P.action(m);let reached=false;for(let i=0;i<300;i++){P.tick(m,1/120);if(m.state.angles[4]>.1)reached=true;}assert(reached);assert(m.events.includes('metal'));});
+check('Malformed persisted values do not become physics inputs',()=>{assert.equal(P.create('zipper',{zip:Infinity}).state.zip,.55);assert.equal(P.create('clicker',{clicks:-100}).state.clicks,0);assert.throws(()=>P.create('unknown'));});
+console.log(`${passed}/${passed} model checks passed`);

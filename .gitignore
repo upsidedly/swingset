@@ -1,0 +1,13 @@
+build/
+.build/
+.swiftpm/
+.DS_Store
+
+# Local configuration and personal state
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+shelf.json
+shelf.previous.json

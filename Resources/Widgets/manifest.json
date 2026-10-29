@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "id": "dev.upsided.swingset",
+  "name": "Swingset",
+  "version": "0.1.0",
+  "widgets": [
+    {
+      "id": "spinner",
+      "name": "Spinner",
+      "description": "Flick a weighted bearing and let it coast.",
+      "entry": "index.html",
+      "width": 260,
+      "height": 230
+    },
+    {
+      "id": "bubbles",
+      "name": "Bubble Wrap",
+      "description": "Twenty-four soft bubbles to pop and reset.",
+      "entry": "index.html",
+      "width": 300,
+      "height": 245
+    },
+    {
+      "id": "clicker",
+      "name": "Clicker",
+      "description": "A spring-loaded button with a mechanical counter.",
+      "entry": "index.html",
+      "width": 250,
+      "height": 230
+    },
+    {
+      "id": "toggles",
+      "name": "Switchboard",
+      "description": "Eight metal switches with a firm snap.",
+      "entry": "index.html",
+      "width": 300,
+      "height": 250
+    },
+    {
+      "id": "gears",
+      "name": "Brass Gears",
+      "description": "Meshed brass gears with tooth-by-tooth detents.",
+      "entry": "index.html",
+      "width": 290,
+      "height": 230
+    },
+    {
+      "id": "abacus",
+      "name": "Abacus",
+      "description": "Slide wooden beads along polished rods.",
+      "entry": "index.html",
+      "width": 300,
+      "height": 245
+    },
+    {
+      "id": "magnets",
+      "name": "Magnets",
+      "description": "Separate chrome magnets and let them find each other.",
+      "entry": "index.html",
+      "width": 280,
+      "height": 240
+    },
+    {
+      "id": "elastic",
+      "name": "Elastic",
+      "description": "Pull a rubber band and release its spring.",
+      "entry": "index.html",
+      "width": 290,
+      "height": 240
+    },
+    {
+      "id": "zipper",
+      "name": "Zipper",
+      "description": "Run a metal pull through the teeth.",
+      "entry": "index.html",
+      "width": 240,
+      "height": 270
+    },
+    {
+      "id": "cradle",
+      "name": "Newton’s Cradle",
+      "description": "Lift an end ball and pass the momentum along.",
+      "entry": "index.html",
+      "width": 300,
+      "height": 250
+    }
+  ]
+}
